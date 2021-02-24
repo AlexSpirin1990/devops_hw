@@ -1,0 +1,41 @@
+apt update
+apt install postgresql postgresql-contrib
+su postgres
+psql
+create user spirin with password 'pass'; (\du+ to check new user)
+create database spirindb; (\l+ to check new db)
+\c spirindb
+
+/* apply sql scripts
+CREATE TABLE article (article_id bigserial primary key, article_name varchar(20) NOT NULL, article_desc text NOT NULL);
+
+CREATE TABLE writer (writer_id bigserial primary key, writer_name varchar(20) NOT NULL);
+
+INSERT INTO public.article(article_id, article_name, article_desc) VALUES (1, 'Name1', 'Description1');
+	
+INSERT INTO public.article(article_id, article_name, article_desc) VALUES (2, 'Name2', 'Description2');
+	
+INSERT INTO public.writer(writer_id, writer_name) VALUES (1, 'Writer1');
+
+INSERT INTO public.writer(writer_id, writer_name) VALUES (2, 'Writer2');
+*/
+
+\dt+ to check new tables
+
+Ctrl+Z
+mkdir /tmp/dump_backup
+
+pg_dump spirindb > /tmp/dump_backup/backup.sql
+
+sudo service postgresql restart (under root user if there is the error: dropdb: error: database removal failed: ERROR:  database "spirindb" is being accessed by other users DETAIL:  There is 1 other session using the database. )
+
+dropdb spirindb;
+
+psql
+
+create database spirindb;
+
+Ctrl+Z
+
+psql -d spirindb -f /tmp/dump_backup/backup.sql
+
